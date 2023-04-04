@@ -73,4 +73,13 @@ public class StandardCourseDidacticService implements AbstractCrudDidacticServic
     public void deleteById(long id) throws EntityNotFoundException, DataException {
         repo.deleteById(id);
     }
+
+    public List<Course> findByTitleAndStatus(String part, boolean isActive) {
+        return repo.findByTitleAndStatus(part, isActive);
+    }
+
+    @Override
+    public List<Course> findByTitleAndStatusAndMinEdition(String part, boolean isActive, long minEditions) {
+        return repo.findByTitleAndStatusAndMinEdition(part, isActive, minEditions);
+    }
 }

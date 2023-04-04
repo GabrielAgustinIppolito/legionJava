@@ -17,6 +17,16 @@ public class HibernateConstants {
             limit :limit
             """;
 
+    public static final String HQL_FIND_COURSE_BY_TITLE_AND_STATUS = """
+            from Course c
+            where c.title like :part and c.active = :status
+            """;
+
+    public static final String HQL_FIND_COURSE_BY_TITLE_STATUS_EDITIONS = """
+            from Course c
+            where c.title like :part and c.active = :status and c.editions.
+            """;
+
     public static final String HQL_FIND_TEACHER_BY_LEVEL = """
             from Teacher t
             where t.level = :level

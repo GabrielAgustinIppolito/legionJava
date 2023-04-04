@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -38,6 +41,30 @@ public class ApiCourseController {
             e.printStackTrace();
             return ResponseEntity.internalServerError().build();
         }
+    }
+
+    @GetMapping()
+    public <T> ResponseEntity<Iterable<SimpleCourseDto>> genericsSearch(T... args) {
+        try {
+            List<Course> result = null;
+
+            switch (args.length) {
+                case 1:
+                    result = service.findCoursesByTitleContains((String) args[0]);
+                case 2:
+                    result = service.findByTitleAndStatus((String) args[0], (Boolean) args[1]);
+                    break;
+                case 3:
+                    result = service.findByTitleAndStatusAndMinEdition((String) args[0], (Boolean) args[1], (Long) args[2]);
+            }
+
+            //assert result != null;
+            return ResponseEntity.ok().body(result.stream().map(SimpleCourseDto::fromEntity).toList());
+        } catch (DataException e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().build();
+        }
+
     }
 
 }

@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import static org.generation.italy.legion.model.data.HibernateConstants.HQL_OLDEST_N_COURSES;
+import static org.generation.italy.legion.model.data.HibernateConstants.*;
 
 @Repository
 @Profile("hibernate")
@@ -82,6 +82,24 @@ public class HibernateCourseRepository extends GenericCrudRepository<Course> imp
     public boolean adjustActiveCourses(int NumActive) throws DataException {
         return false;
     }
+
+    @Override
+    public List<Course> findByTitleAndStatus(String part, boolean isActive) {
+        Query<Course> q = session.createQuery(HQL_FIND_COURSE_BY_TITLE_AND_STATUS, Course.class);
+        q.setParameter("part", part);
+        q.setParameter("status", isActive);
+        return q.list();
+    }
+
+    @Override
+    public List<Course> findByTitleAndStatusAndMinEdition(String part, boolean isActive, long minEditions) {
+        Query<Course> q = session.createQuery(HQL_FIND_COURSE_BY_TITLE_STATUS_EDITIONS, Course.class);
+        q.setParameter("part", part);
+        q.setParameter("status", isActive);
+        q.setParameter("editions", minEditions);
+        return q.list();
+    }
+
     @Override
     public List<Course> findByTitleContains(String part) throws DataException {
         Query<Course> q = session.createQuery("from Course where title like :p", Course.class);
