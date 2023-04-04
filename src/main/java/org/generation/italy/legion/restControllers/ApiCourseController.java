@@ -51,11 +51,13 @@ public class ApiCourseController {
             switch (args.length) {
                 case 1:
                     result = service.findCoursesByTitleContains((String) args[0]);
+                    break;
                 case 2:
                     result = service.findByTitleAndStatus((String) args[0], (Boolean) args[1]);
                     break;
                 case 3:
                     result = service.findByTitleAndStatusAndMinEdition((String) args[0], (Boolean) args[1], (Long) args[2]);
+                    break;
             }
 
             //assert result != null;
