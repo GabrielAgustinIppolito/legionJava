@@ -13,6 +13,6 @@ public interface AbstractCourseDidacticService extends AbstractCrudDidacticServi
 
     List<Course> findByTitleAndStatus(String part, boolean isActive);
 
-    List<Course> findByTitleAndStatusAndMinEdition(String part, boolean isActive, long minEditions);
+    List<Course> findByTitleAndStatusAndMinEdition(String part, boolean isActive, int minEditions);
 
 }

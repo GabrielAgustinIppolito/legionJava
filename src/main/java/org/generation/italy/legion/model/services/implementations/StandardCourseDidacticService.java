@@ -79,7 +79,7 @@ public class StandardCourseDidacticService implements AbstractCrudDidacticServic
     }
 
     @Override
-    public List<Course> findByTitleAndStatusAndMinEdition(String part, boolean isActive, long minEditions) {
+    public List<Course> findByTitleAndStatusAndMinEdition(String part, boolean isActive, int minEditions) {
         return repo.findByTitleAndStatusAndMinEdition(part, isActive, minEditions);
     }
 }

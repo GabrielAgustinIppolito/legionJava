@@ -2,6 +2,8 @@ package org.generation.italy.legion.dtos;
 
 import org.generation.italy.legion.model.entities.Course;
 
+import java.util.stream.StreamSupport;
+
 public class SimpleCourseDto {
     private long id;
     private String title;
@@ -17,6 +19,12 @@ public class SimpleCourseDto {
 
     public static SimpleCourseDto fromEntity(Course c) {
         return new SimpleCourseDto(c.getId(), c.getTitle(), c.getDescription(), c.getProgram());
+    }
+
+    public static Iterable<SimpleCourseDto> fromEntityIterable(Iterable<Course> iC) {
+        return StreamSupport.stream(iC.spliterator(), false)
+                .map(SimpleCourseDto::fromEntity)
+                .toList();
     }
 
     public long getId() {

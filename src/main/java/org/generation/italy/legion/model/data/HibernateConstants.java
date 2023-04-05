@@ -2,6 +2,8 @@ package org.generation.italy.legion.model.data;
 
 public class HibernateConstants {
 
+    public static final String HQL_FIND_COURSE_BY_TITLE_CONTAINS = "from Course where title like :p";
+
     public static final String HQL_DEACTIVATE_OLDEST_N_COURSES = """
                update Course c set c.isActive=false where c in (
                select co from Course co where co.isActive = true
@@ -22,9 +24,16 @@ public class HibernateConstants {
             where c.title like :part and c.active = :status
             """;
 
+    public static final String HQL_FIND_COURSE_BY_TITLE_STATUS_EDITIONS_OLD = """
+            from Course c inner join CourseEdition ce on c.id = ce.course.id
+            where (c.title like :part) and (c.active = :status)
+            group by c.id
+            having count(ce.course.id) >= :editions
+            """;
+
     public static final String HQL_FIND_COURSE_BY_TITLE_STATUS_EDITIONS = """
             from Course c
-            where c.title like :part and c.active = :status and c.editions.
+            where c.title like :part and c.active = :status and size(c.editions) >= :editions
             """;
 
     public static final String HQL_FIND_TEACHER_BY_LEVEL = """

@@ -7,10 +7,7 @@ import org.generation.italy.legion.model.entities.Course;
 import org.generation.italy.legion.model.services.abstractions.AbstractCourseDidacticService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -44,24 +41,24 @@ public class ApiCourseController {
     }
 
     @GetMapping()
-    public <T> ResponseEntity<Iterable<SimpleCourseDto>> genericsSearch(T... args) {
+    public ResponseEntity<Iterable<SimpleCourseDto>> genericsSearch(@RequestParam String titleLike,
+                                                                    @RequestParam(required = false) Boolean isActive,
+                                                                    @RequestParam(required = false) Integer minEditions) {
         try {
             List<Course> result = null;
 
-            switch (args.length) {
-                case 1:
-                    result = service.findCoursesByTitleContains((String) args[0]);
-                    break;
-                case 2:
-                    result = service.findByTitleAndStatus((String) args[0], (Boolean) args[1]);
-                    break;
-                case 3:
-                    result = service.findByTitleAndStatusAndMinEdition((String) args[0], (Boolean) args[1], (Long) args[2]);
-                    break;
+            if (titleLike != null && isActive != null && isActive && minEditions != null) {
+                result = service.findByTitleAndStatusAndMinEdition(titleLike, isActive, minEditions);
+            } else if (titleLike != null && isActive != null && isActive) {
+                result = service.findByTitleAndStatus(titleLike, isActive);
+            } else if (titleLike != null) {
+                result = service.findCoursesByTitleContains(titleLike);
+            } else {
+                return ResponseEntity.badRequest().build();
             }
 
             //assert result != null;
-            return ResponseEntity.ok().body(result.stream().map(SimpleCourseDto::fromEntity).toList());
+            return ResponseEntity.ok().body(SimpleCourseDto.fromEntityIterable(result));
         } catch (DataException e) {
             e.printStackTrace();
             return ResponseEntity.internalServerError().build();
