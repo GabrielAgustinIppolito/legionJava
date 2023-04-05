@@ -3,10 +3,11 @@ package org.generation.italy.legion.model.data.abstractions;
 import org.generation.italy.legion.model.data.exceptions.DataException;
 import org.generation.italy.legion.model.entities.Level;
 import org.generation.italy.legion.model.entities.Teacher;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
-public interface TeacherRepository extends CrudRepository<Teacher, Long> {
+public interface TeacherRepository extends JpaRepository<Teacher, Long> {
     Iterable<Teacher> findByLevel(Level teacherLevel) throws DataException;
 
     @Query("""

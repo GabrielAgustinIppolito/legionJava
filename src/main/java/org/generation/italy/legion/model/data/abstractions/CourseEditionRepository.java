@@ -1,19 +1,22 @@
 package org.generation.italy.legion.model.data.abstractions;
 
 import org.generation.italy.legion.model.entities.CourseEdition;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.time.LocalDate;
-import java.util.Optional;
+public interface CourseEditionRepository extends JpaRepository<CourseEdition,Long> {
 
-public interface CourseEditionRepository {
-    double getTotalCost();
-    Optional<CourseEdition> findMostExpensive();
-    double findAverageCost();
-    Iterable<Double> findAllDuration();
-    Iterable<CourseEdition> findByCourse(long courseId);
-    Iterable<CourseEdition> findByCourseTitleAndPeriod(String titlePart,
-                                                       LocalDate startAt, LocalDate endAt);
-    Iterable<CourseEdition> findMedian();
-    Optional<Double> getCourseEditionCostMode();
+//    double getTotalCost();
+////    @Query(value = "SELECT u FROM User u")
+//    Optional<CourseEdition> findMostExpensive();
+//
+//    double findAverageCost();
+//    Iterable<Double> findAllDuration();
+    Iterable<CourseEdition> findByCourseId(long courseId);
+//    Iterable<CourseEdition> findByCourseTitleAndPeriod(String titlePart,
+//                                                       LocalDate startAt, LocalDate endAt);
+//    Iterable<CourseEdition> findMedian();
+//    Optional<Double> getCourseEditionCostMode();
+
+
 
 }

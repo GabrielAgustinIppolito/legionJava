@@ -15,9 +15,8 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.generation.italy.legion.model.data.JDBCConstants.*;
-@Repository
-@Profile("jdbc")
-public class JDBCCourseEditionRepository implements CourseEditionRepository {
+
+public class JDBCCourseEditionRepository{
 
     private Connection con;
 
@@ -25,12 +24,10 @@ public class JDBCCourseEditionRepository implements CourseEditionRepository {
         this.con = connection;
     }
 
-    @Override
     public double getTotalCost() {
         return 0;
     }
 
-    @Override
     public Optional<CourseEdition> findMostExpensive() {
         try (
             Statement st = con.createStatement();
@@ -45,17 +42,14 @@ public class JDBCCourseEditionRepository implements CourseEditionRepository {
         }
     }
 
-    @Override
     public double findAverageCost() {
         return 0;
     }
 
-    @Override
     public Iterable<Double> findAllDuration() {
         return null;
     }
 
-    @Override
     public Iterable<CourseEdition> findByCourse(long courseId) {
         try (PreparedStatement ps = con.prepareStatement(FIND_COURSE_EDITION_BY_COURSE)){
             ps.setLong(1, courseId);
@@ -72,7 +66,6 @@ public class JDBCCourseEditionRepository implements CourseEditionRepository {
         }
     }
 
-    @Override
     public Iterable<CourseEdition> findByCourseTitleAndPeriod(String titlePart, LocalDate startAt, LocalDate endAt) {
         try (PreparedStatement ps = con.prepareStatement(FIND_COURSE_EDITION_BY_COURSE_TILE_AND_PERIOD)){
             ps.setString(1, "%"+titlePart+"%");
@@ -107,12 +100,10 @@ public class JDBCCourseEditionRepository implements CourseEditionRepository {
         }
     }
 
-    @Override
     public Iterable<CourseEdition> findMedian() {
         return null;
     }
 
-    @Override
     public Optional<Double> getCourseEditionCostMode() {
         return Optional.empty();
     }

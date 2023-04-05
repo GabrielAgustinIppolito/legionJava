@@ -1,26 +1,29 @@
 package org.generation.italy.legion.model.services.implementations;
 
+import org.generation.italy.legion.model.data.abstractions.CourseEditionRepository;
 import org.generation.italy.legion.model.data.abstractions.CourseRepository;
 import org.generation.italy.legion.model.data.exceptions.DataException;
 import org.generation.italy.legion.model.data.exceptions.EntityNotFoundException;
 import org.generation.italy.legion.model.entities.Course;
+import org.generation.italy.legion.model.entities.CourseEdition;
 import org.generation.italy.legion.model.services.abstractions.AbstractCourseDidacticService;
+import org.generation.italy.legion.model.services.abstractions.AbstractCourseEditionDidacticService;
 import org.generation.italy.legion.model.services.abstractions.AbstractCrudDidacticService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class StandardCourseDidacticService implements AbstractCrudDidacticService<Course>, AbstractCourseDidacticService {
+public class StandardDidacticService implements AbstractCrudDidacticService<Course>, AbstractCourseDidacticService{
     //@Autowired
     private CourseRepository repo; // field injection = inietta sul campo
-
+    private CourseEditionRepository editionRepo;
     @Autowired
-    public StandardCourseDidacticService(CourseRepository repo) { // constructor injection = inietta sul costruttore (è opzionale l'annotazione)
+    public StandardDidacticService(CourseRepository repo, CourseEditionRepository editionRepo) { // constructor injection = inietta sul costruttore (è opzionale l'annotazione)
         this.repo = repo;       //iniezione delle dipendenze (tecnica) -> inversione del controllo (design pattern) o inversione delle dipendenze
+        this.editionRepo = editionRepo;
         System.out.println(this.repo.getClass().getName());
     }
 
@@ -81,5 +84,12 @@ public class StandardCourseDidacticService implements AbstractCrudDidacticServic
     @Override
     public List<Course> findByTitleAndStatusAndMinEdition(String part, boolean isActive, int minEditions) {
         return repo.findByTitleAndStatusAndMinEdition(part, isActive, minEditions);
+    }
+
+    public Iterable<CourseEdition> findByCourseId(long courseId){
+        return editionRepo.findByCourseId(courseId);
+    }
+    public Iterable<CourseEdition> findAllCourseEdition(){
+        return editionRepo.findAll();
     }
 }

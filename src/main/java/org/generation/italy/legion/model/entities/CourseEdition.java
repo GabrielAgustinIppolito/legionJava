@@ -86,6 +86,7 @@ public class CourseEdition {
     public boolean isStartedInRange(LocalDate start, LocalDate end){
         return !(getStartedAt().isBefore(start) || getStartedAt().isAfter(end));
     }
+
     public int addModule (EditionModule e ) {
         this.modules.add(e);
         return modules.size();
