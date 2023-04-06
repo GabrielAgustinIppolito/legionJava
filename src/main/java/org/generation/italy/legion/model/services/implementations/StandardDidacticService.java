@@ -80,4 +80,13 @@ public class StandardDidacticService implements AbstractDidacticService {
     public Iterable<CourseEdition> findAllCourseEdition(){
         return editionRepo.findAll();
     }
+
+    @Override
+    public Iterable<CourseEdition> findCourseEditionMedianByCost() {
+        return editionRepo.findMedian();
+    }
+    @Override
+    public Optional<Double> getCourseEditionCostMode(){
+        return editionRepo.getCourseEditionCostMode();
+    }
 }

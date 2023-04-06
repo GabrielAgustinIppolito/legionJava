@@ -2,21 +2,23 @@ package org.generation.italy.legion.model.data.abstractions;
 
 import org.generation.italy.legion.model.entities.CourseEdition;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
-public interface CourseEditionRepository extends JpaRepository<CourseEdition,Long> {
+import java.time.LocalDate;
+import java.util.Optional;
 
-//    double getTotalCost();
-////    @Query(value = "SELECT u FROM User u")
-//    Optional<CourseEdition> findMostExpensive();
-//
-//    double findAverageCost();
-//    Iterable<Double> findAllDuration();
+public interface CourseEditionRepository extends JpaRepository<CourseEdition,Long>,
+                                                    CourseEditionCustomRepository{
+    @Query("select sum(ce.cost) from CourseEdition ce")
+    double getTotalCost();
+
+    Optional<CourseEdition> findFirstByOrderByCostDesc();
+    @Query("select avg(ce.cost) from CourseEdition ce")
+    double findAverageCost();
+    @Query("select sum(ce.course.duration) from CourseEdition ce")
+    double findAllDuration();
     Iterable<CourseEdition> findByCourseId(long courseId);
-//    Iterable<CourseEdition> findByCourseTitleAndPeriod(String titlePart,
-//                                                       LocalDate startAt, LocalDate endAt);
-//    Iterable<CourseEdition> findMedian();
-//    Optional<Double> getCourseEditionCostMode();
-
-
+    Iterable<CourseEdition> findByCourseTitleContainingAndStartedAtBetween(String titlePart,
+                                                       LocalDate startAt, LocalDate endAt);
 
 }

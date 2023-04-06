@@ -7,6 +7,7 @@ import org.generation.italy.legion.model.entities.Level;
 import org.generation.italy.legion.model.entities.Teacher;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface AbstractDidacticService {
 
@@ -22,4 +23,7 @@ public interface AbstractDidacticService {
     Iterable<CourseEdition> findByCourseId(long courseId);
 
     Iterable<CourseEdition> findAllCourseEdition();
+
+    Iterable<CourseEdition> findCourseEditionMedianByCost();
+    Optional<Double> getCourseEditionCostMode();
 }
