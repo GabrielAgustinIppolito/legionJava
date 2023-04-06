@@ -4,13 +4,12 @@ package org.generation.italy.legion.restControllers;
 import org.generation.italy.legion.dtos.SimpleCourseDto;
 import org.generation.italy.legion.model.data.exceptions.DataException;
 import org.generation.italy.legion.model.entities.Course;
-import org.generation.italy.legion.model.services.abstractions.AbstractCourseDidacticService;
+import org.generation.italy.legion.model.services.abstractions.AbstractCrudService;
+import org.generation.italy.legion.model.services.abstractions.AbstractDidacticService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,17 +17,19 @@ import java.util.Optional;
 @RequestMapping(value = "api/courses")
 public class ApiCourseController {
 
-    private AbstractCourseDidacticService service;
+    private AbstractDidacticService didacticService;
+    private AbstractCrudService<Course> courseService;
 
     @Autowired
-    public ApiCourseController(AbstractCourseDidacticService service){
-        this.service = service;
+    public ApiCourseController(AbstractDidacticService service, AbstractCrudService<Course> courseService){
+        this.didacticService = service;
+        this.courseService = courseService;
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<SimpleCourseDto> findById(@PathVariable long id) {
         try {
-            Optional<Course> oc = service.findById(id);
+            Optional<Course> oc = courseService.findById(id);
             if (oc.isPresent()) {
                 return ResponseEntity.ok().body(SimpleCourseDto.fromEntity(oc.get()));
             }
@@ -48,11 +49,11 @@ public class ApiCourseController {
             List<Course> result = null;
 
             if (titleLike != null && isActive != null && isActive && minEditions != null) {
-                result = service.findByTitleAndStatusAndMinEdition(titleLike, isActive, minEditions);
+                result = didacticService.findByTitleAndStatusAndMinEdition(titleLike, isActive, minEditions);
             } else if (titleLike != null && isActive != null && isActive) {
-                result = service.findByTitleAndStatus(titleLike, isActive);
+                result = didacticService.findByTitleAndStatus(titleLike, isActive);
             } else if (titleLike != null) {
-                result = service.findCoursesByTitleContains(titleLike);
+                result = didacticService.findCoursesByTitleContains(titleLike);
             } else {
                 return ResponseEntity.badRequest().build();
             }

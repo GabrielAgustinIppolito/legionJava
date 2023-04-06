@@ -1,10 +1,10 @@
 package org.generation.italy.legion.controllers;
 
 import org.generation.italy.legion.model.data.exceptions.DataException;
-import org.generation.italy.legion.model.entities.Course;
 import org.generation.italy.legion.model.entities.Level;
 import org.generation.italy.legion.model.entities.Teacher;
-import org.generation.italy.legion.model.services.abstractions.AbstractTeacherDidacticService;
+import org.generation.italy.legion.model.services.abstractions.AbstractCrudService;
+import org.generation.italy.legion.model.services.abstractions.AbstractDidacticService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,11 +14,13 @@ import java.util.Optional;
 
 @Controller
 public class TeacherController {
-    private AbstractTeacherDidacticService service;
+    private AbstractDidacticService didacticService;
+    private AbstractCrudService<Teacher> teacherService;
 
     @Autowired
-    public TeacherController(AbstractTeacherDidacticService service){
-        this.service = service;
+    public TeacherController(AbstractDidacticService didacticService, AbstractCrudService<Teacher> teacherService){
+        this.didacticService = didacticService;
+        this.teacherService = teacherService;
     }
 
     @GetMapping("/showTeacherInsertForm")
@@ -29,7 +31,7 @@ public class TeacherController {
     @GetMapping("/findWithSkillAndLevel")
     public String findWithSkillAndLevel(Model m, long id, Level level){
         try {
-            Iterable<Teacher> teacherIt = service.findWithSkillAndLevel(id, level);
+            Iterable<Teacher> teacherIt = didacticService.findWithSkillAndLevel(id, level);
             m.addAttribute("teachers", teacherIt);
             return "result_with_skill_and_level";
         } catch (DataException e){
@@ -42,7 +44,7 @@ public class TeacherController {
     @GetMapping("/findById")
     public String findById(Model m, long id){
         try {
-            Optional<Teacher> teacherOp = service.findById(id);
+            Optional<Teacher> teacherOp = teacherService.findById(id);
             teacherOp.orElse(new Teacher());
             m.addAttribute("teacher", teacherOp);
             return "result_find_by_id";

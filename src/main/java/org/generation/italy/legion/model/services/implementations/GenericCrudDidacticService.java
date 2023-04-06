@@ -3,14 +3,15 @@ package org.generation.italy.legion.model.services.implementations;
 import org.generation.italy.legion.model.data.exceptions.DataException;
 import org.generation.italy.legion.model.data.exceptions.EntityNotFoundException;
 import org.generation.italy.legion.model.data.implementations.GenericCrudRepository;
-import org.generation.italy.legion.model.services.abstractions.AbstractCrudDidacticService;
+import org.generation.italy.legion.model.services.abstractions.AbstractCrudService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-
-public class GenericCrudDidacticService<T> implements AbstractCrudDidacticService<T> {
+@Service
+public class GenericCrudDidacticService<T> implements AbstractCrudService<T> {
 
     private GenericCrudRepository<T> repo; // field injection = inietta sul campo
 
