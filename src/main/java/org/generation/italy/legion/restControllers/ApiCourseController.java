@@ -2,10 +2,12 @@ package org.generation.italy.legion.restControllers;
 
 
 import org.generation.italy.legion.dtos.SimpleCourseDto;
+import org.generation.italy.legion.model.data.abstractions.GenericRepository;
 import org.generation.italy.legion.model.data.exceptions.DataException;
+import org.generation.italy.legion.model.data.exceptions.EntityNotFoundException;
 import org.generation.italy.legion.model.entities.Course;
-import org.generation.italy.legion.model.services.abstractions.AbstractCrudService;
 import org.generation.italy.legion.model.services.abstractions.AbstractDidacticService;
+import org.generation.italy.legion.model.services.implementations.GenereicService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,18 +20,22 @@ import java.util.Optional;
 public class ApiCourseController {
 
     private AbstractDidacticService didacticService;
-    private AbstractCrudService<Course> courseService;
+//    private AbstractCrudService<Course> courseService;
+    private GenereicService<Course> crudService;
+
 
     @Autowired
-    public ApiCourseController(AbstractDidacticService service, AbstractCrudService<Course> courseService){
+    public ApiCourseController(AbstractDidacticService service,
+                               GenericRepository<Course> courseRepo){
         this.didacticService = service;
-        this.courseService = courseService;
+//        this.courseService = courseService;
+        this.crudService = new GenereicService<>(courseRepo);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<SimpleCourseDto> findById(@PathVariable long id) {
         try {
-            Optional<Course> oc = courseService.findById(id);
+            Optional<Course> oc = crudService.findById(id);
             if (oc.isPresent()) {
                 return ResponseEntity.ok().body(SimpleCourseDto.fromEntity(oc.get()));
             }
@@ -63,6 +69,21 @@ public class ApiCourseController {
         } catch (DataException e) {
             e.printStackTrace();
             return ResponseEntity.internalServerError().build();
+        }
+
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteById(@PathVariable long id){
+        try {
+            Optional<Course> oCourse = crudService.findById(id);
+            if (oCourse.isEmpty()) {
+                return ResponseEntity.notFound().build();
+            }
+            crudService.deleteById(id);
+            return ResponseEntity.noContent().build();
+        } catch (DataException | EntityNotFoundException e) {
+            throw new RuntimeException(e);
         }
 
     }

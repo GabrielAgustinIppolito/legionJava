@@ -2,6 +2,7 @@ package org.generation.italy.legion.model.data.abstractions;
 
 import org.generation.italy.legion.model.data.exceptions.DataException;
 import org.generation.italy.legion.model.data.exceptions.EntityNotFoundException;
+import org.springframework.data.repository.NoRepositoryBean;
 
 import java.util.List;
 import java.util.Optional;

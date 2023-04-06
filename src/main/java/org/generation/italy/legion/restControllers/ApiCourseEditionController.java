@@ -1,26 +1,28 @@
 package org.generation.italy.legion.restControllers;
 
-import org.aspectj.lang.annotation.RequiredTypes;
 import org.generation.italy.legion.dtos.SimpleCourseEditionDto;
+import org.generation.italy.legion.model.data.abstractions.GenericRepository;
 import org.generation.italy.legion.model.entities.CourseEdition;
-import org.generation.italy.legion.model.services.abstractions.AbstractCrudService;
 import org.generation.italy.legion.model.services.abstractions.AbstractDidacticService;
-import org.generation.italy.legion.model.services.implementations.StandardDidacticService;
+import org.generation.italy.legion.model.services.implementations.GenereicService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "api/editions")
 public class ApiCourseEditionController {
    private AbstractDidacticService didacticService;
-   private AbstractCrudService<CourseEdition> editionService;
+//   private AbstractCrudService<CourseEdition> editionService;
+   private GenereicService<CourseEdition> crudService;
+
    @Autowired
-   public ApiCourseEditionController(AbstractDidacticService service){
+   public ApiCourseEditionController(AbstractDidacticService service, GenericRepository<CourseEdition> courseEditionRepo){
       this.didacticService = service;
+      this.crudService = new GenereicService<>(courseEditionRepo);
+
    }
 
    @GetMapping("/{courseId}")

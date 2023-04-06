@@ -7,10 +7,11 @@ import org.generation.italy.legion.model.data.exceptions.EntityNotFoundException
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.NoRepositoryBean;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
-
 public class GenericCrudRepository<T> implements AbstractCrudRepository<T> {
    //@Autowired
    protected Session session;

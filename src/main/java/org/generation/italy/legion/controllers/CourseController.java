@@ -1,10 +1,11 @@
 package org.generation.italy.legion.controllers;
 
 import jakarta.validation.Valid;
+import org.generation.italy.legion.model.data.abstractions.GenericRepository;
 import org.generation.italy.legion.model.data.exceptions.DataException;
 import org.generation.italy.legion.model.entities.Course;
-import org.generation.italy.legion.model.services.abstractions.AbstractCrudService;
 import org.generation.italy.legion.model.services.abstractions.AbstractDidacticService;
+import org.generation.italy.legion.model.services.implementations.GenereicService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,12 +18,14 @@ import java.util.Optional;
 @Controller
 public class CourseController {
     private AbstractDidacticService didacticService;
-    private AbstractCrudService<Course> courseService;
+//    private AbstractCrudService<Course> courseService;
+    private GenereicService<Course> crudService;
 
     @Autowired
-    public CourseController(AbstractDidacticService service, AbstractCrudService<Course> courseService) {
+    public CourseController(AbstractDidacticService service, GenericRepository<Course> courseRepo) {
         this.didacticService = service;
-        this.courseService = courseService;
+//        this.courseService = courseService;
+        this.crudService = new GenereicService<>(courseRepo);
     }
 
     @GetMapping("/home")
@@ -48,7 +51,7 @@ public class CourseController {
     @GetMapping("/index")
     public String showCourses(Model m){  // Model è un oggetto che trasferisce dati tra il Controller e la View
         try {
-            Iterable<Course> courseList = courseService.findAll();
+            Iterable<Course> courseList = crudService.findAll();
             m.addAttribute("courses", courseList);
             return "courses";
         } catch (DataException e) {
@@ -60,7 +63,7 @@ public class CourseController {
     @GetMapping("/findCourseById")
     public String findById(Model m, long courseId){
         try {
-            Optional<Course> c = courseService.findById(courseId);
+            Optional<Course> c = crudService.findById(courseId);
             Course found = c.orElse(new Course());
             m.addAttribute("course", found);
             return "course_detail";
@@ -77,7 +80,7 @@ public class CourseController {
             return "insert_course";
         }
         try {
-            courseService.create(c);
+            crudService.create(c);
             return "home";
         } catch (DataException e) {
             e.printStackTrace();

@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
-public interface TeacherRepository extends JpaRepository<Teacher, Long> {
+public interface TeacherRepository extends GenericRepository<Teacher> {
     Iterable<Teacher> findByLevel(Level teacherLevel) throws DataException;
 
     @Query("""
