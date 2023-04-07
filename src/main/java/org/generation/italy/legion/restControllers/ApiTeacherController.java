@@ -4,6 +4,7 @@ import org.generation.italy.legion.dtos.SimpleTeacherDto;
 import org.generation.italy.legion.dtos.TeacherDto;
 import org.generation.italy.legion.model.data.abstractions.GenericRepository;
 import org.generation.italy.legion.model.data.exceptions.DataException;
+import org.generation.italy.legion.model.data.exceptions.EntityNotFoundException;
 import org.generation.italy.legion.model.entities.Level;
 import org.generation.italy.legion.model.entities.Teacher;
 import org.generation.italy.legion.model.services.abstractions.AbstractDidacticService;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.Optional;
 
 @RestController
@@ -53,6 +55,51 @@ public class ApiTeacherController {
         } catch (DataException e){
             e.printStackTrace();
             return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    @PostMapping()
+    public ResponseEntity<TeacherDto> create(@RequestBody TeacherDto teacherDto){
+        Teacher tE = teacherDto.toEntity();
+        try {
+            var teacherResult = this.crudService.create(tE);
+            TeacherDto dtoResult = TeacherDto.fromEntity(teacherResult);
+            return ResponseEntity.created(URI.create("/api/teacher/" + teacherResult.getId())).body(dtoResult);
+        } catch (DataException e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().build();
+        }
+
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> update (@RequestBody TeacherDto teacherDto,@PathVariable long id){
+        if(teacherDto.getId() != id){
+            return ResponseEntity.badRequest().build();
+        }
+        Teacher te = teacherDto.toEntity();
+        try{
+            this.crudService.update(te);
+            return ResponseEntity.noContent().build();
+        } catch (DataException e){
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().build();
+        }catch (EntityNotFoundException e){
+            e.printStackTrace();
+            return ResponseEntity.notFound().build();
+        }
+    }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable long id){
+        try{
+            this.crudService.deleteById(id);
+            return ResponseEntity.noContent().build();
+        }catch (DataException e){
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().build();
+        }catch (EntityNotFoundException e){
+            e.printStackTrace();
+            return ResponseEntity.notFound().build();
         }
     }
 }

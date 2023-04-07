@@ -1,9 +1,20 @@
 package org.generation.italy.legion.dtos;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.generation.italy.legion.model.entities.Level;
 import org.generation.italy.legion.model.entities.Sex;
 import org.generation.italy.legion.model.entities.Teacher;
+import static org.generation.italy.legion.utilities.StringUtilities.*;
 
+import java.time.LocalDate;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class TeacherDto extends PersonDto{
     private String pIVA;
     private boolean isEmployee;
@@ -23,47 +34,18 @@ public class TeacherDto extends PersonDto{
 
     public static TeacherDto fromEntity(Teacher t){
         return new TeacherDto(t.getId(), t.getFirstname(), t.getLastname(), t.getDob().toString(), t.getSex(), t.getEmail(),
-                t.getCellNumber(), t.getUsername(), t.getPassword(), t.getpIVA(), t.isEmployee(),
+                t.getCellNumber(), t.getUsername(), t.getPassword(), t.getPIVA(), t.isEmployee(),
                 t.getHireDate() != null ? t.getHireDate().toString() : "", t.getFireDate() != null ? t.getFireDate().toString() : "", t.getLevel());
     }
 
-    public String getpIVA() {
-        return pIVA;
+    public Teacher toEntity(){
+        return new Teacher(this.id, this.firstname, this.lastname,
+              fromJSONString(this.dob),
+              this.sex, this.email, this.cellNumber,
+              null, this.username, this.password, null, this.pIVA, this.isEmployee,
+              isNullOrEmpty(this.hireDate)? null : LocalDate.parse(this.hireDate),
+                isNullOrEmpty(this.fireDate)? null : LocalDate.parse(this.fireDate),
+              this.level);
     }
 
-    public void setpIVA(String pIVA) {
-        this.pIVA = pIVA;
-    }
-
-    public boolean isEmployee() {
-        return isEmployee;
-    }
-
-    public void setEmployee(boolean employee) {
-        isEmployee = employee;
-    }
-
-    public String getHireDate() {
-        return hireDate;
-    }
-
-    public void setHireDate(String hireDate) {
-        this.hireDate = hireDate;
-    }
-
-    public String getFireDate() {
-        return fireDate;
-    }
-
-    public void setFireDate(String fireDate) {
-        this.fireDate = fireDate;
-    }
-
-    public Level getLevel() {
-        return level;
-    }
-
-    public void setLevel(Level level) {
-        this.level = level;
-    }
 }
