@@ -47,8 +47,7 @@ public class ApiTeacherController {
     //dovrà tornare un teacher con solo id, nome e cognome, nome skill e livello a cui la possiede
     @GetMapping()
     public ResponseEntity<Iterable<SimpleTeacherDto>> findWithSkillAndLevel(@RequestParam(required = false) Long skillId,
-                                                             @RequestParam(required = false)
-                                        Level level){
+                                                                            @RequestParam(required = false) Level level){
         try {
             Iterable<Teacher> teacherIt = didacticService.findWithSkillAndLevel(skillId, level);
             return ResponseEntity.ok().body(SimpleTeacherDto.fromEntityIterable(teacherIt, skillId));
@@ -101,5 +100,9 @@ public class ApiTeacherController {
             e.printStackTrace();
             return ResponseEntity.notFound().build();
         }
+    }
+    @GetMapping("/hi")
+    ResponseEntity<String> message(){
+        return ResponseEntity.ok("hi ciao");
     }
 }

@@ -27,17 +27,4 @@ public abstract class PersonDto {
     protected String cellNumber;
     protected String username;
     protected String password;
-
-//    public PersonDto(long id, String firstname, String lastname, String dob, Sex sex, String email, String cellNumber,
-//                     String username, String password) {
-//        this.id = id;
-//        this.firstname = firstname;
-//        this.lastname = lastname;
-//        this.dob = dob;
-//        this.sex = sex;
-//        this.email = email;
-//        this.cellNumber = cellNumber;
-//        this.username = username;
-//        this.password = password;
-//    }
 }

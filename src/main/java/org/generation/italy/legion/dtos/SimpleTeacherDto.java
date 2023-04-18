@@ -23,20 +23,6 @@ public class SimpleTeacherDto {
    private long skillId;
    private Level skillLevel;
 
-
-//   public SimpleTeacherDto(long id, String firstname, String lastname, Sex sex, Level level, String pIVA,
-//                              String skillName, long skillId, Level skillLevel) {
-//      this.id = id;
-//      this.firstname = firstname;
-//      this.lastname = lastname;
-//      this.sex = sex;
-//      this.level = level;
-//      this.pIVA = pIVA;
-//      this.skillName = skillName;
-//      this.skillId = skillId;
-//      this.skillLevel = skillLevel;
-//
-//   }
    public static SimpleTeacherDto fromEntity(Teacher t, long skillId){
       Optional<Competence> oC = t.getCompetenceForSkill(skillId);
       Competence c = oC.get();
